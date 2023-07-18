@@ -8,7 +8,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import br.com.bilangieri.minesweeper.exception.ExplosionException;
-import br.com.bilangieri.minesweeper.model.Field;
 
 class FieldTest {
 
@@ -122,6 +121,9 @@ class FieldTest {
 		field.addNeighbor(b3);
 		field.addNeighbor(b4);
 		 field.open();
+		 System.out.println(field);
+		 System.out.println(b2);
+		 
 		assertFalse(bb2.isOpen() && b2.isOpen() && b3.isMarked());
 		
 	}

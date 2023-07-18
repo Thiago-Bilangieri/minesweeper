@@ -20,6 +20,58 @@ public class Field {
 		this.line = line;
 	}
 
+	public boolean isMarked() {
+		return marked;
+	};
+
+	public boolean isOpen() {
+		return open;
+	};
+
+	public int getLine() {
+		return line;
+	}
+
+	public int getCol() {
+		return col;
+	}
+	
+	public boolean isMined() {
+		return mined;
+	}
+
+
+	int mineInBorder() {
+		return (int) borders.stream().filter(b -> b.mined).count();
+	}
+
+	void restart() {
+		marked = false;
+		mined = false;
+		open = false;
+	}
+
+	@Override
+	public String toString() {
+		if (marked) {
+			return "x";
+		} else if (open && mined) {
+			return "*";
+		} else if (open && mineInBorder() > 0) {
+			return Integer.toString(mineInBorder());
+		}else if(open) {
+			return " ";
+		}else {
+			return "?";
+		}
+	}
+
+	public boolean goal() {
+		var unveiled = !mined && open;
+		var protect = mined && marked;
+		return unveiled || protect;
+	}
+
 	boolean addNeighbor(Field borderer) {
 		boolean differentLine = this.line != borderer.line;
 		boolean differentCol = this.col != borderer.col;
@@ -42,10 +94,10 @@ public class Field {
 	}
 
 	void changeMarked() {
-		
-			marked = !marked;		
+
+		marked = !marked;
 	}
-	
+
 	void mine() {
 		mined = true;
 	}
@@ -61,22 +113,14 @@ public class Field {
 			}
 			return true;
 		}
-		
+
 		return false;
 	}
 
 	boolean safe() {
 		return borders.stream().noneMatch(n -> {
-			System.out.println("CAMPO " +n.line+","+n.col+ "MINADO?: " + n.mined);
 			return n.mined;
 		});
 	}
-
-	public boolean isMarked() {
-		return marked;
-	};
-	public boolean isOpen() {
-		return open;
-	};
 
 }
