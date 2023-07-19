@@ -101,6 +101,9 @@ public class Field {
 	void mine() {
 		mined = true;
 	}
+	void forceOpen() {
+		open = true;
+	}
 
 	boolean open() {
 		if (!open && !marked) {

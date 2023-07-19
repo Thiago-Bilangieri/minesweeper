@@ -3,6 +3,8 @@ package br.com.bilangieri.minesweeper.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.bilangieri.minesweeper.exception.ExplosionException;
+
 public class Board {
 
 	private int line;
@@ -21,7 +23,6 @@ public class Board {
 	}
 
 	private void placeMines() {
-		System.out.println(mines);
 		int armedMines = 1;
 		do {
 			fields.get((int) (Math.random() * fields.size())).mine();
@@ -59,15 +60,20 @@ public class Board {
 	}
 
 	public void open(int line, int col) {
-		fields.parallelStream().filter(f -> f.getLine() == line && f.getCol() == col).findFirst()
-				.ifPresent(f -> f.open());
-		;
+		try {
+			fields.parallelStream().filter(f -> f.getLine() == line && f.getCol() == col).findFirst()
+					.ifPresent(f -> f.open());
+		} catch (ExplosionException e) {
+			fields.forEach(f -> f.forceOpen());
+			throw e;
+		}
+
 	}
 
 	public void changeMarked(int line, int col) {
 		fields.parallelStream().filter(f -> f.getLine() == line && f.getCol() == col).findFirst()
 				.ifPresent(f -> f.changeMarked());
-		;
+
 	}
 
 	@Override
